@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meira Lin · 林藝軒 | Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=DM+Sans:wght@300;400;500&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --warm-white: #F7F6F3;
+    --ink: #1E1E1E;
+    --slate: #3D6B8E;
+    --terra: #E8835A;
+    --muted: #8A8A8A;
+    --line: rgba(30,30,30,0.1);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--warm-white); font-family: 'DM Sans','Noto Sans TC',sans-serif; color: var(--ink); }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 56px;
+    background: rgba(247,246,243,0.97);
+    backdrop-filter: blur(8px);
+    border-bottom: 0.5px solid var(--line);
+  }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--ink); text-decoration: none; }
+  .nav-logo span { color: var(--terra); font-style: italic; }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { font-size: 12px; color: var(--muted); text-decoration: none; letter-spacing: 0.05em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .nav-hamburger span { display: block; width: 22px; height: 1px; background: var(--ink); transition: all 0.3s; }
+  .nav-mobile { display: none; position: fixed; top: 53px; left:0; right:0; background: rgba(247,246,243,0.99); border-bottom: 0.5px solid var(--line); z-index:99; padding: 16px 24px; flex-direction: column; gap: 16px; }
+  .nav-mobile.open { display: flex; }
+  .nav-mobile a { font-size: 14px; color: var(--muted); text-decoration: none; letter-spacing: 0.05em; padding: 6px 0; border-bottom: 0.5px solid var(--line); }
+
+  /* ── HERO desktop ── */
+  #hero {
+    min-height: 100vh; padding-top: 53px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    position: relative; overflow: hidden;
+    background: var(--warm-white);
+  }
+  .hero-left {
+    background: var(--warm-white);
+    padding: 80px 48px 64px 56px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    border-right: 0.5px solid var(--line);
+    position: relative; z-index: 1;
+  }
+  .hero-right {
+    background: var(--warm-white);
+    padding: 80px 56px 64px 48px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    position: relative; z-index: 1;
+  }
+  .badge { font-size: 11px; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; }
+  .hero-en { font-family: 'Playfair Display', serif; font-size: 72px; font-weight: 400; color: var(--ink); line-height: 1.0; margin-top: 48px; }
+  .hero-en span { color: var(--terra); font-style: italic; }
+  .hero-zh { font-size: 18px; font-weight: 300; color: var(--muted); margin-top: 12px; letter-spacing: 0.15em; }
+  .hero-tagline { margin-top: 32px; font-size: 15px; color: var(--ink); line-height: 1.8; font-weight: 300; max-width: 340px; border-left: 2px solid var(--terra); padding-left: 16px; }
+  .current-role { display: flex; flex-direction: column; gap: 5px; }
+  .role-label { font-size: 10px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; }
+  .role-value { font-size: 13px; color: var(--ink); font-weight: 400; }
+  .role-mba { font-size: 13px; color: var(--slate); font-weight: 400; }
+  .cta-row { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+  .btn-primary { background: var(--ink); color: var(--warm-white); border: none; padding: 12px 24px; font-size: 13px; font-family: 'DM Sans',sans-serif; cursor: pointer; letter-spacing: 0.04em; border-radius: 2px; transition: background 0.2s; }
+  .btn-primary:hover { background: var(--slate); }
+  .btn-ghost { background: transparent; color: var(--ink); border: 0.5px solid rgba(30,30,30,0.3); padding: 12px 24px; font-size: 13px; font-family: 'DM Sans',sans-serif; cursor: pointer; letter-spacing: 0.04em; border-radius: 2px; transition: all 0.2s; }
+  .btn-ghost:hover { border-color: var(--ink); background: rgba(30,30,30,0.04); }
+  .deco-num { position: absolute; right: 40px; top: 60px; font-family: 'Playfair Display',serif; font-size: 180px; color: rgba(61,107,142,0.06); font-weight: 400; line-height: 1; pointer-events: none; user-select: none; z-index: 0; }
+  .availability-dot { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); margin-bottom: 48px; justify-content: flex-end; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: #5BAD7A; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; border: 0.5px solid var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 32px; }
+  .stat-item { padding: 20px; background: rgba(255,255,255,0.6); display: flex; flex-direction: column; gap: 4px; }
+  .stat-item:nth-child(1),.stat-item:nth-child(2) { border-bottom: 0.5px solid var(--line); }
+  .stat-item:nth-child(odd) { border-right: 0.5px solid var(--line); }
+  .stat-num { font-family: 'Playfair Display',serif; font-size: 32px; color: var(--ink); font-weight: 400; line-height: 1; }
+  .stat-num .unit { font-size: 16px; color: var(--terra); font-style: italic; }
+  .stat-desc { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; line-height: 1.5; }
+  .industry-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  .tag { font-size: 11px; color: var(--slate); border: 0.5px solid rgba(61,107,142,0.35); padding: 5px 12px; border-radius: 20px; background: rgba(61,107,142,0.04); }
+  .scroll-hint { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); letter-spacing: 0.08em; }
+  .scroll-line { width: 32px; height: 0.5px; background: var(--muted); }
+
+  /* ── SECTIONS COMMON ── */
+  .section { padding: 80px 56px; }
+  .section-label { font-size: 10px; letter-spacing: 0.18em; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+  .section-title { font-family: 'Playfair Display',serif; font-size: 36px; font-weight: 400; color: var(--ink); margin-bottom: 8px; }
+  .section-title span { color: var(--terra); font-style: italic; }
+  .section-sub { font-size: 13px; color: var(--muted); margin-bottom: 48px; font-weight: 300; }
+
+  /* ── CAREER ── */
+  #career { background: var(--warm-white); border-top: 0.5px solid var(--line); }
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before { content:''; position:absolute; left:0; top:8px; bottom:8px; width:0.5px; background:var(--line); }
+  .tl-item { position: relative; margin-bottom: 4px; }
+  .tl-dot { position:absolute; left:-32px; top:20px; width:8px; height:8px; border-radius:50%; background:var(--warm-white); border:1.5px solid var(--muted); transition:border-color 0.2s,background 0.2s; }
+  .tl-item.active .tl-dot,.tl-item:hover .tl-dot { border-color:var(--terra); background:var(--terra); }
+  .tl-item.current .tl-dot { border-color:var(--slate); background:var(--slate); }
+  .tl-header { padding:18px 20px; cursor:pointer; border-radius:4px; transition:background 0.15s; display:grid; grid-template-columns:1fr auto; align-items:center; gap:16px; border:0.5px solid transparent; }
+  .tl-item.active .tl-header,.tl-header:hover { background:rgba(255,255,255,0.7); border-color:var(--line); }
+  .tl-meta { display:flex; flex-direction:column; gap:3px; }
+  .tl-period { font-size:11px; color:var(--muted); letter-spacing:0.06em; }
+  .tl-company { font-size:15px; color:var(--ink); font-weight:500; }
+  .tl-role { font-size:12px; color:var(--slate); font-weight:400; margin-top:1px; }
+  .tl-current-badge { font-size:10px; background:rgba(61,107,142,0.1); color:var(--slate); border:0.5px solid rgba(61,107,142,0.25); padding:3px 10px; border-radius:20px; letter-spacing:0.06em; white-space:nowrap; }
+  .tl-arrow { font-size:12px; color:var(--muted); transition:transform 0.25s,color 0.2s; user-select:none; }
+  .tl-item.active .tl-arrow { transform:rotate(180deg); color:var(--terra); }
+  .tl-body { overflow:hidden; max-height:0; transition:max-height 0.35s ease,opacity 0.25s ease; opacity:0; }
+  .tl-item.active .tl-body { max-height:600px; opacity:1; }
+  .tl-body-inner { padding:4px 20px 24px; display:grid; grid-template-columns:1fr 1fr; gap:20px 32px; }
+  .tl-col-label { font-size:10px; letter-spacing:0.12em; color:var(--muted); text-transform:uppercase; margin-bottom:10px; }
+  .tl-col ul { list-style:none; display:flex; flex-direction:column; gap:7px; }
+  .tl-col ul li { font-size:13px; color:var(--ink); line-height:1.6; padding-left:12px; position:relative; font-weight:300; }
+  .tl-col ul li::before { content:''; position:absolute; left:0; top:9px; width:4px; height:0.5px; background:var(--terra); }
+  .tl-highlights { display:flex; flex-direction:column; gap:8px; }
+  .highlight-pill { display:inline-flex; align-items:center; gap:8px; font-size:12px; color:var(--ink); line-height:1.5; font-weight:300; }
+  .highlight-pill::before { content:''; flex-shrink:0; width:6px; height:6px; border-radius:50%; background:rgba(61,107,142,0.35); }
+
+  /* ── PORTFOLIO ── */
+  #portfolio { background: #F0EFEB; border-top: 0.5px solid var(--line); }
+  .featured-grid { display:flex; flex-direction:column; gap:2px; margin-bottom:32px; }
+  .feat-card { background:rgba(255,255,255,0.6); border:0.5px solid var(--line); border-radius:4px; overflow:hidden; cursor:pointer; transition:border-color 0.2s; }
+  .feat-card:hover { border-color:rgba(30,30,30,0.2); }
+  .feat-card.open { border-color:rgba(61,107,142,0.3); }
+  .feat-header { display:grid; grid-template-columns:48px 1fr auto; align-items:center; gap:20px; padding:22px 24px; }
+  .feat-num { font-family:'Playfair Display',serif; font-size:26px; color:rgba(232,131,90,0.2); font-weight:400; line-height:1; user-select:none; }
+  .feat-meta { display:flex; flex-direction:column; gap:4px; }
+  .feat-tag { font-size:10px; letter-spacing:0.1em; color:var(--slate); text-transform:uppercase; background:rgba(61,107,142,0.07); padding:2px 8px; border-radius:20px; display:inline-block; width:fit-content; }
+  .feat-title { font-size:15px; color:var(--ink); font-weight:500; line-height:1.4; }
+  .feat-desc { font-size:12px; color:var(--muted); font-weight:300; }
+  .feat-arrow { font-size:13px; color:var(--muted); transition:transform 0.25s,color 0.2s; user-select:none; }
+  .feat-card.open .feat-arrow { transform:rotate(180deg); color:var(--terra); }
+  .feat-body { overflow:hidden; max-height:0; opacity:0; transition:max-height 0.4s ease,opacity 0.3s ease; }
+  .feat-card.open .feat-body { max-height:500px; opacity:1; }
+  .feat-body-inner { border-top:0.5px solid var(--line); padding:20px 24px 24px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; }
+  .fb-col-label { font-size:10px; letter-spacing:0.12em; color:var(--muted); text-transform:uppercase; margin-bottom:8px; }
+  .fb-col ul { list-style:none; display:flex; flex-direction:column; gap:5px; }
+  .fb-col ul li { font-size:12px; color:var(--ink); line-height:1.5; padding-left:10px; position:relative; font-weight:300; }
+  .fb-col ul li::before { content:''; position:absolute; left:0; top:7px; width:4px; height:0.5px; background:var(--terra); }
+  .fb-result { background:rgba(61,107,142,0.05); border:0.5px solid rgba(61,107,142,0.15); border-radius:4px; padding:12px 14px; font-size:12px; color:var(--ink); line-height:1.8; font-weight:300; }
+  .fb-result strong { font-weight:500; color:var(--slate); display:block; margin-bottom:2px; }
+  .quick-label { font-size:10px; letter-spacing:0.18em; color:var(--muted); text-transform:uppercase; margin-bottom:16px; }
+  .quick-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; }
+  .quick-card { background:rgba(255,255,255,0.5); border:0.5px solid var(--line); border-radius:4px; padding:18px 20px; display:flex; flex-direction:column; gap:5px; transition:background 0.15s,border-color 0.15s; }
+  .quick-card:hover { background:rgba(255,255,255,0.8); border-color:rgba(30,30,30,0.15); }
+  .quick-tag { font-size:10px; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; }
+  .quick-title { font-size:13px; color:var(--ink); font-weight:500; }
+  .quick-note { font-size:12px; color:var(--muted); font-weight:300; }
+  .quick-pill { margin-top:4px; display:inline-block; font-size:10px; color:var(--terra); border:0.5px solid rgba(232,131,90,0.3); padding:2px 8px; border-radius:20px; width:fit-content; }
+
+  /* ── SKILLS ── */
+  #skills { background: var(--warm-white); border-top: 0.5px solid var(--line); }
+  .skills-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; }
+  .skill-card { background:rgba(255,255,255,0.6); border:0.5px solid var(--line); border-radius:4px; overflow:hidden; cursor:pointer; transition:border-color 0.2s; }
+  .skill-card:hover { border-color:rgba(30,30,30,0.2); }
+  .skill-card.open { border-color:rgba(61,107,142,0.3); }
+  .skill-header { display:flex; align-items:center; justify-content:space-between; padding:18px 20px; gap:12px; }
+  .skill-header-left { display:flex; align-items:center; gap:14px; }
+  .skill-icon { width:32px; height:32px; border-radius:50%; background:rgba(61,107,142,0.08); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .skill-icon svg { width:14px; height:14px; stroke:var(--slate); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+  .skill-name { font-size:13px; color:var(--ink); font-weight:500; }
+  .skill-summary { font-size:11px; color:var(--muted); font-weight:300; margin-top:1px; }
+  .skill-arrow { font-size:11px; color:var(--muted); transition:transform 0.25s,color 0.2s; flex-shrink:0; }
+  .skill-card.open .skill-arrow { transform:rotate(180deg); color:var(--terra); }
+  .skill-body { overflow:hidden; max-height:0; opacity:0; transition:max-height 0.35s ease,opacity 0.25s ease; }
+  .skill-card.open .skill-body { max-height:300px; opacity:1; }
+  .skill-body-inner { border-top:0.5px solid var(--line); padding:14px 20px 18px; display:flex; flex-direction:column; gap:6px; }
+  .skill-item { display:flex; align-items:flex-start; gap:8px; font-size:12px; color:var(--ink); font-weight:300; line-height:1.5; }
+  .skill-dot { flex-shrink:0; width:4px; height:4px; border-radius:50%; background:var(--terra); margin-top:6px; }
+  .divider-label { font-size:10px; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; margin:28px 0 14px; display:flex; align-items:center; gap:12px; }
+  .divider-label::after { content:''; flex:1; height:0.5px; background:var(--line); }
+  .tools-row { display:flex; flex-wrap:wrap; gap:8px; }
+  .tool-tag { font-size:11px; color:var(--ink); border:0.5px solid var(--line); background:rgba(255,255,255,0.7); padding:5px 14px; border-radius:20px; font-weight:300; transition:border-color 0.15s; }
+  .tool-tag:hover { border-color:rgba(61,107,142,0.4); color:var(--slate); }
+  .tool-tag.highlight { border-color:rgba(232,131,90,0.35); color:var(--terra); background:rgba(232,131,90,0.04); }
+
+  /* ── CONTACT ── */
+  #contact { background:var(--ink); padding:80px 56px; position:relative; overflow:hidden; }
+  .contact-deco { position:absolute; right:48px; bottom:-20px; font-family:'Playfair Display',serif; font-size:200px; color:rgba(255,255,255,0.03); font-weight:400; line-height:1; pointer-events:none; user-select:none; }
+  .contact-section-label { font-size:10px; letter-spacing:0.18em; color:rgba(255,255,255,0.35); text-transform:uppercase; margin-bottom:8px; }
+  .contact-title { font-family:'Playfair Display',serif; font-size:36px; font-weight:400; color:#fff; margin-bottom:12px; }
+  .contact-title span { color:var(--terra); font-style:italic; }
+  .contact-sub { font-size:13px; color:rgba(255,255,255,0.45); font-weight:300; margin-bottom:56px; }
+  .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; }
+  .contact-left { display:flex; flex-direction:column; gap:24px; }
+  .contact-item { display:flex; flex-direction:column; gap:4px; }
+  .contact-item-label { font-size:10px; letter-spacing:0.12em; color:rgba(255,255,255,0.35); text-transform:uppercase; }
+  .contact-item-value { font-size:14px; color:rgba(255,255,255,0.85); font-weight:300; }
+  .contact-item-value a { color:var(--terra); text-decoration:none; }
+  .contact-item-value a:hover { text-decoration:underline; }
+  .social-row { display:flex; gap:10px; margin-top:2px; }
+  .social-btn { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:rgba(255,255,255,0.6); border:0.5px solid rgba(255,255,255,0.15); padding:5px 14px; border-radius:20px; text-decoration:none; font-weight:300; transition:border-color 0.2s,color 0.2s; }
+  .social-btn:hover { border-color:var(--terra); color:var(--terra); }
+  .social-btn svg { width:12px; height:12px; stroke:currentColor; fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+  .contact-right { display:flex; flex-direction:column; gap:16px; }
+  .contact-note { font-size:13px; color:rgba(255,255,255,0.4); font-weight:300; line-height:1.8; border-left:1.5px solid rgba(232,131,90,0.4); padding-left:16px; }
+  .btn-row { display:flex; flex-direction:column; gap:10px; margin-top:8px; }
+  .btn-cv { display:inline-flex; align-items:center; justify-content:center; background:var(--terra); color:#fff; border:none; padding:13px 28px; font-size:13px; font-family:'DM Sans',sans-serif; cursor:pointer; letter-spacing:0.04em; border-radius:2px; transition:opacity 0.2s; }
+  .btn-cv:hover { opacity:0.85; }
+  .btn-email { display:inline-flex; align-items:center; justify-content:center; background:transparent; color:rgba(255,255,255,0.7); border:0.5px solid rgba(255,255,255,0.2); padding:13px 28px; font-size:13px; font-family:'DM Sans',sans-serif; cursor:pointer; letter-spacing:0.04em; border-radius:2px; transition:border-color 0.2s,color 0.2s; }
+  .btn-email:hover { border-color:rgba(255,255,255,0.5); color:#fff; }
+  .footer-divider { height:0.5px; background:rgba(255,255,255,0.08); margin:40px 0 28px; }
+  .footer-row { display:flex; justify-content:space-between; align-items:center; }
+  .footer-name { font-family:'Playfair Display',serif; font-size:15px; color:rgba(255,255,255,0.4); font-weight:400; }
+  .footer-copy { font-size:11px; color:rgba(255,255,255,0.2); letter-spacing:0.06em; }
+
+  /* ── ANIMATIONS ── */
+  .fade-in { animation: fadeUp 0.7s ease both; }
+  .fade-in-2 { animation: fadeUp 0.7s 0.15s ease both; }
+  .fade-in-3 { animation: fadeUp 0.7s 0.3s ease both; }
+  .fade-in-4 { animation: fadeUp 0.7s 0.45s ease both; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── RWD ── */
+  @media (max-width: 768px) {
+    nav { padding: 14px 24px; }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+
+    /* Hero mobile: split into two blocks */
+    #hero {
+      display: block;
+      min-height: auto;
+      padding-top: 53px;
+    }
+    .hero-left {
+      background: var(--warm-white);
+      padding: 40px 24px 36px;
+      border-right: none;
+      border-bottom: 0.5px solid var(--line);
+    }
+    .hero-right {
+      background: #EEECEA;
+      padding: 32px 24px 48px;
+    }
+    .deco-num { display: none; }
+    .hero-en { font-size: 48px; margin-top: 28px; }
+    .hero-zh { font-size: 15px; }
+    .hero-tagline { font-size: 14px; max-width: 100%; }
+    .availability-dot { justify-content: flex-start; margin-bottom: 24px; }
+    .cta-row { flex-direction: column; }
+    .btn-primary, .btn-ghost { width: 100%; justify-content: center; text-align: center; }
+    .stat-row { margin-bottom: 24px; }
+    .stat-num { font-size: 26px; }
+    .stat-desc { font-size: 10px; }
+
+    .section { padding: 48px 24px; }
+    .section-title { font-size: 28px; }
+
+    .tl-body-inner { grid-template-columns: 1fr; gap: 16px; }
+    .tl-company { font-size: 14px; }
+
+    .feat-header { grid-template-columns: 36px 1fr auto; gap: 12px; padding: 16px; }
+    .feat-num { font-size: 20px; }
+    .feat-title { font-size: 13px; }
+    .feat-body-inner { grid-template-columns: 1fr; gap: 16px; padding: 16px; }
+    .feat-card.open .feat-body { max-height: 900px; }
+
+    .quick-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .skill-card.open .skill-body { max-height: 400px; }
+
+    #contact { padding: 48px 24px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 32px; }
+    .contact-title { font-size: 28px; }
+    .contact-sub { margin-bottom: 32px; }
+    .btn-cv, .btn-email { width: 100%; }
+    .footer-row { flex-direction: column; gap: 8px; text-align: center; }
+    .contact-deco { font-size: 120px; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-en { font-size: 40px; }
+    .industry-tags .tag { font-size: 10px; padding: 4px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero">Meira <span>Lin.</span></a>
+  <div class="nav-links">
+    <a href="#career">Career</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nav-hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="#career" onclick="closeMenu()">Career</a>
+  <a href="#portfolio" onclick="closeMenu()">Portfolio</a>
+  <a href="#skills" onclick="closeMenu()">Skills</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="fade-in"><span class="badge">Marketing & Operations</span></div>
+    <div class="fade-in-2">
+      <div class="hero-en">Meira<br><span>Lin.</span></div>
+      <div class="hero-zh">林 藝 軒</div>
+      <p class="hero-tagline">行銷企劃出身，深耕品牌策略與會員營運——<br>用數據思考，用創意說話。</p>
+    </div>
+    <div class="fade-in-3">
+      <div class="current-role">
+        <span class="role-label">Current</span>
+        <span class="role-value">和雲行動服務 iRent &nbsp;·&nbsp; 營運行銷高級專員</span>
+        <span class="role-mba">國立臺北科技大學 經營管理碩士 &nbsp;·&nbsp; 2026 入學</span>
+      </div>
+      <div class="cta-row">
+        <button class="btn-primary" onclick="document.getElementById('portfolio').scrollIntoView({behavior:'smooth'})">View Portfolio</button>
+        <button class="btn-ghost" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Download CV</button>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="deco-num">9</div>
+    <div class="availability-dot fade-in"><span class="dot"></span><span>Open to opportunities</span></div>
+    <div>
+      <div class="stat-row fade-in-2">
+        <div class="stat-item"><div class="stat-num">9<span class="unit">yr</span></div><div class="stat-desc">跨產業行銷<br>企劃經驗</div></div>
+        <div class="stat-item"><div class="stat-num">3<span class="unit">+</span></div><div class="stat-desc">產業別<br>百貨・版權・共享車</div></div>
+        <div class="stat-item"><div class="stat-num">10<span class="unit">+</span></div><div class="stat-desc">代表性專案<br>品牌 × 活動 × 展覽</div></div>
+        <div class="stat-item"><div class="stat-num">2<span class="unit">nd</span></div><div class="stat-desc">和雲 AI 黑客松<br>競賽獲獎</div></div>
+      </div>
+      <div class="industry-tags fade-in-3">
+        <span class="tag">品牌行銷策略</span><span class="tag">會員經營 CRM</span><span class="tag">活動策展</span><span class="tag">異業合作</span><span class="tag">數據分析</span><span class="tag">訂閱制運營</span><span class="tag">公部門溝通</span><span class="tag">AI 應用</span>
+      </div>
+      <div class="scroll-hint fade-in-4"><span class="scroll-line"></span><span>scroll to explore</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CAREER -->
+<section id="career" class="section">
+  <div class="section-label">Experience</div>
+  <div class="section-title">Career <span>Timeline</span></div>
+  <div class="timeline">
+    <div class="tl-item current" data-index="0">
+      <div class="tl-dot"></div>
+      <div class="tl-header" onclick="toggleTl(0)">
+        <div class="tl-meta">
+          <span class="tl-period">2026/02 – Now</span>
+          <span class="tl-company">和雲行動服務 iRent</span>
+          <span class="tl-role">營運行銷高級專員</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span class="tl-current-badge">現職</span>
+          <span class="tl-arrow">▾</span>
+        </div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-body-inner">
+          <div class="tl-col"><div class="tl-col-label">負責範疇</div><ul><li>付費會員經營與行為分析</li><li>沉睡會員喚醒計畫（PDCA）</li><li>廣宣主軸（內／外）執行統籌</li><li>外籍客戶行銷計畫</li></ul></div>
+          <div class="tl-col"><div class="tl-col-label">能力應用</div><div class="tl-highlights"><span class="highlight-pill">會員生命週期管理</span><span class="highlight-pill">數據儀表板建立（PowerBI · SQL）</span><span class="highlight-pill">跨部門策略整合</span><span class="highlight-pill">成效追蹤與報告</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tl-item" data-index="1">
+      <div class="tl-dot"></div>
+      <div class="tl-header" onclick="toggleTl(1)">
+        <div class="tl-meta">
+          <span class="tl-period">2023/05 – 2026/01 &nbsp;·&nbsp; 2年9個月</span>
+          <span class="tl-company">和雲行動服務 iRent</span>
+          <span class="tl-role">行銷企劃專員</span>
+        </div>
+        <span class="tl-arrow">▾</span>
+      </div>
+      <div class="tl-body">
+        <div class="tl-body-inner">
+          <div class="tl-col"><div class="tl-col-label">主要工作</div><ul><li>IP 聯名企劃（功夫熊貓、神偷奶爸）</li><li>公部門合作（交通部觀光署仲夏節）</li><li>會員拉新活動企劃（愛神宮 × Hi PARKING）</li><li>線上旅展方案擬定與媒體整合</li><li>時數套組每月百萬業績維運</li><li>電商平台運營與點數平台開發</li></ul></div>
+          <div class="tl-col"><div class="tl-col-label">亮點成果</div><div class="tl-highlights"><span class="highlight-pill">線上旅展業績成長近 25%</span><span class="highlight-pill">AI 黑客松競賽獲第 2 名</span><span class="highlight-pill">首次促成政府單位品牌合作</span><span class="highlight-pill">建立 PowerBI 廣告成效儀表板</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tl-item" data-index="2">
+      <div class="tl-dot"></div>
+      <div class="tl-header" onclick="toggleTl(2)">
+        <div class="tl-meta">
+          <span class="tl-period">2021/10 – 2023/03 &nbsp;·&nbsp; 1年6個月</span>
+          <span class="tl-company">開物整合設計 ／ 信賴互動行銷</span>
+          <span class="tl-role">企劃・媒體公關</span>
+        </div>
+        <span class="tl-arrow">▾</span>
+      </div>
+      <div class="tl-body">
+        <div class="tl-body-inner">
+          <div class="tl-col"><div class="tl-col-label">主要工作</div><ul><li>新聞稿撰寫與媒體關係維護</li><li>KOL／KOC 開發與合作執行</li><li>公關活動企劃與記者會執行</li><li>HTC 元宇宙虛擬線上展統籌</li><li>課程規劃與社群內容經營</li></ul></div>
+          <div class="tl-col"><div class="tl-col-label">能力累積</div><div class="tl-highlights"><span class="highlight-pill">媒體生態與公關操作</span><span class="highlight-pill">口碑行銷策略規劃</span><span class="highlight-pill">跨產業客戶溝通</span><span class="highlight-pill">線上展覽從零建構</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tl-item" data-index="3">
+      <div class="tl-dot"></div>
+      <div class="tl-header" onclick="toggleTl(3)">
+        <div class="tl-meta">
+          <span class="tl-period">2019/02 – 2021/10 &nbsp;·&nbsp; 2年9個月</span>
+          <span class="tl-company">木棉花國際股份有限公司</span>
+          <span class="tl-role">行銷企劃專員</span>
+        </div>
+        <span class="tl-arrow">▾</span>
+      </div>
+      <div class="tl-body">
+        <div class="tl-body-inner">
+          <div class="tl-col"><div class="tl-col-label">主要工作</div><ul><li>海內外動漫展覽統籌</li><li>首家直營門市「銀河指揮部」獨立專案</li><li>IP 圖像創意設計與策展規劃</li><li>門市人員教育訓練與現場管理</li></ul></div>
+          <div class="tl-col"><div class="tl-col-label">亮點成果</div><div class="tl-highlights"><span class="highlight-pill">廣州展 5 天達 6,000 人次</span><span class="highlight-pill">首家動漫門市從零到開幕</span><span class="highlight-pill">獨立承接海外展全程庶務</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tl-item" data-index="4">
+      <div class="tl-dot"></div>
+      <div class="tl-header" onclick="toggleTl(4)">
+        <div class="tl-meta">
+          <span class="tl-period">2016/08 – 2019/02 &nbsp;·&nbsp; 2年7個月</span>
+          <span class="tl-company">台中中友百貨</span>
+          <span class="tl-role">活動企劃員</span>
+        </div>
+        <span class="tl-arrow">▾</span>
+      </div>
+      <div class="tl-body">
+        <div class="tl-body-inner">
+          <div class="tl-col"><div class="tl-col-label">主要工作</div><ul><li>全館 SP 策略擬定與檔期企劃</li><li>異業合作洽談與執行</li><li>會員 APP 推廣與回饋禮規劃</li><li>兒童劇場、大型展覽集客活動</li><li>數據分析制定策略與結案報告</li></ul></div>
+          <div class="tl-col"><div class="tl-col-label">亮點成果</div><div class="tl-highlights"><span class="highlight-pill">CARS 展覽 23 天 15 萬人次</span><span class="highlight-pill">帶動全館業績成長近 10%</span><span class="highlight-pill">LET'GO 圓夢業績達成率 +5%</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" class="section">
+  <div class="section-label">Work</div>
+  <div class="section-title">Port<span>folio</span></div>
+  <div class="section-sub">精選專案 · 點擊展開完整說明</div>
+  <div class="featured-grid">
+    <div class="feat-card" onclick="toggleFeat(this)">
+      <div class="feat-header"><div class="feat-num">01</div><div class="feat-meta"><span class="feat-tag">會員營運 · 數據分析</span><div class="feat-title">付費會員經營全流程</div><div class="feat-desc">首購轉化 → 重購加深，主動分析行為與調整策略</div></div><span class="feat-arrow">▾</span></div>
+      <div class="feat-body"><div class="feat-body-inner">
+        <div class="fb-col"><div class="fb-col-label">背景</div><ul><li>付費會員為核心營收來源</li><li>首購至重購流程缺乏系統追蹤</li><li>需建立分析框架支撐策略決策</li></ul></div>
+        <div class="fb-col"><div class="fb-col-label">我的角色</div><ul><li>主擔當，全流程負責</li><li>監測各管道首購轉化路徑</li><li>分析購後行為，規劃重購策略</li><li>預測需求，適度調整供給</li></ul></div>
+        <div class="fb-col"><div class="fb-col-label">工具與方法</div><div class="fb-result"><strong>PowerBI · SQL</strong>儀表板監測轉化漏斗，分析會員行為數據，以 PDCA 循環持續優化策略</div></div>
+      </div></div>
+    </div>
+    <div class="feat-card" onclick="toggleFeat(this)">
+      <div class="feat-header"><div class="feat-num">02</div><div class="feat-meta"><span class="feat-tag">品牌行銷 · IP聯名</span><div class="feat-title">iRent × 功夫熊貓／神偷奶爸 聯名車貼</div><div class="feat-desc">將共享運具化身移動品牌載體，打造街道討論度</div></div><span class="feat-arrow">▾</span></div>
+      <div class="feat-body"><div class="feat-body-inner">
+        <div class="fb-col"><div class="fb-col-label">背景</div><ul><li>共享品牌競爭激烈，需差異化</li><li>以 IP 情感連結降低推廣阻力</li><li>提升會員品牌記憶度</li></ul></div>
+        <div class="fb-col"><div class="fb-col-label">我的角色</div><ul><li>聯名主題與行銷切角發想</li><li>與授權方協調、視覺方向規劃</li><li>整合設計、營運、資訊、行銷單位</li></ul></div>
+        <div class="fb-col"><div class="fb-col-label">成果</div><div class="fb-result"><strong>街道露出 · 社群自發擴散</strong>品牌曝光延伸至日常生活場景，確立 IP 聯名為長期差異化策略的一環</div></div>
+      </div></div>
+    </div>
+    <div class="feat-card" onclick="toggleFeat(this)">
+      <div class="feat-header"><div class="feat-num">03</div><div class="feat-meta"><span class="feat-tag">議題行銷 · 會員拉新</span><div class="feat-title">愛神宮 × Hi PARKING 會員拉新</div><div class="feat-desc">情感議題帶動自發擴散，成為當年度主力檔期</div></div><span class="feat-arrow">▾</span></div>
+      <div class="feat-body"><div class="feat-body-inner">
+        <div class="fb-col"><div class="fb-col-label">背景</div><ul><li>會員成長趨緩，需低干擾拉新</li><li>以諧音情感議題操作引發擴散</li><li>結合線下資源提升參與誘因</li></ul></div>
+        <div class="fb-col"><div class="fb-col-label">我的角色</div><ul><li>整體提案發想與資源爭取</li><li>遊戲化參與機制設計</li><li>線上線下溝通一致性把關</li></ul></div>
+        <div class="fb-col"><div class="fb-col-label">成果</div><div class="fb-result"><strong>成為年度主力檔期</strong>成功帶動新會員加入，累積議題行銷從創意到轉換的完整操作經驗</div></div>
+      </div></div>
+    </div>
+  </div>
+  <div class="quick-label">其他專案</div>
+  <div class="quick-grid">
+    <div class="quick-card"><div class="quick-tag">公部門合作</div><div class="quick-title">仲夏節 × 交通部觀光署</div><div class="quick-note">iRent 首次與政府單位合作，全台巡迴品牌露出</div><span class="quick-pill">品牌公信力提升</span></div>
+    <div class="quick-card"><div class="quick-tag">電商運營</div><div class="quick-title">線上旅展方案</div><div class="quick-note">方案擬定、媒體整合、系統設定全程統籌</div><span class="quick-pill">業績成長近 25%</span></div>
+    <div class="quick-card"><div class="quick-tag">大型展覽</div><div class="quick-title">CARS 玩具總動員</div><div class="quick-note">首次全體驗遊戲區型態，與迪士尼、野獸國合作</div><span class="quick-pill">23 天 15 萬人次</span></div>
+    <div class="quick-card"><div class="quick-tag">門市統籌</div><div class="quick-title">木棉花銀河指揮部</div><div class="quick-note">首家動漫直營門市，從零獨立統籌至開幕</div><span class="quick-pill">12 家廠商聯合</span></div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="section">
+  <div class="section-label">Expertise</div>
+  <div class="section-title">Skills &amp; <span>Know-how</span></div>
+  <div class="section-sub">10 年工作經驗累積 · 點擊展開細項</div>
+  <div class="skills-grid">
+    <div class="skill-card" onclick="toggleSkill(this)">
+      <div class="skill-header"><div class="skill-header-left"><div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><div><div class="skill-name">品牌行銷策略</div><div class="skill-summary">品牌定位 · IP聯名 · 異業合作</div></div></div><span class="skill-arrow">▾</span></div>
+      <div class="skill-body"><div class="skill-body-inner"><div class="skill-item"><span class="skill-dot"></span>品牌定位規劃與顧客旅程設計</div><div class="skill-item"><span class="skill-dot"></span>IP 聯名主題發想與授權方溝通</div><div class="skill-item"><span class="skill-dot"></span>異業合作提案、談判與執行</div><div class="skill-item"><span class="skill-dot"></span>廣宣預算規劃與成效控管</div><div class="skill-item"><span class="skill-dot"></span>公部門合作提案與資源整合</div></div></div>
+    </div>
+    <div class="skill-card" onclick="toggleSkill(this)">
+      <div class="skill-header"><div class="skill-header-left"><div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div><div class="skill-name">會員經營 CRM</div><div class="skill-summary">訂閱制 · 拉新 · 沉睡喚醒</div></div></div><span class="skill-arrow">▾</span></div>
+      <div class="skill-body"><div class="skill-body-inner"><div class="skill-item"><span class="skill-dot"></span>付費會員首購轉化與重購加深策略</div><div class="skill-item"><span class="skill-dot"></span>沉睡會員喚醒計畫（PDCA）</div><div class="skill-item"><span class="skill-dot"></span>議題行銷帶動新會員拉新</div><div class="skill-item"><span class="skill-dot"></span>會員行為分析與需求預測</div><div class="skill-item"><span class="skill-dot"></span>CRM 策略規劃與促進方案執行</div></div></div>
+    </div>
+    <div class="skill-card" onclick="toggleSkill(this)">
+      <div class="skill-header"><div class="skill-header-left"><div class="skill-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><div><div class="skill-name">活動策展與專案管理</div><div class="skill-summary">展覽統籌 · 跨部門協調 · 時程控管</div></div></div><span class="skill-arrow">▾</span></div>
+      <div class="skill-body"><div class="skill-body-inner"><div class="skill-item"><span class="skill-dot"></span>大型實體展覽從零規劃至執行</div><div class="skill-item"><span class="skill-dot"></span>快閃店、門市開幕獨立統籌</div><div class="skill-item"><span class="skill-dot"></span>跨部門資源整合與進度管控</div><div class="skill-item"><span class="skill-dot"></span>海外展覽獨立執行（兩岸溝通）</div><div class="skill-item"><span class="skill-dot"></span>突發狀況應變與現場管理</div></div></div>
+    </div>
+    <div class="skill-card" onclick="toggleSkill(this)">
+      <div class="skill-header"><div class="skill-header-left"><div class="skill-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div><div class="skill-name">數據分析與決策支援</div><div class="skill-summary">PowerBI · SQL · 廣告成效追蹤</div></div></div><span class="skill-arrow">▾</span></div>
+      <div class="skill-body"><div class="skill-body-inner"><div class="skill-item"><span class="skill-dot"></span>PowerBI 儀表板建立與視覺化呈現</div><div class="skill-item"><span class="skill-dot"></span>SQL 分析會員行為數據</div><div class="skill-item"><span class="skill-dot"></span>廣告投放數據整合分析</div><div class="skill-item"><span class="skill-dot"></span>數據驅動策略調整與成效回測</div></div></div>
+    </div>
+    <div class="skill-card" onclick="toggleSkill(this)">
+      <div class="skill-header"><div class="skill-header-left"><div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div><div class="skill-name">溝通提案與簡報</div><div class="skill-summary">結構化提案 · 視覺呈現 · 公關文案</div></div></div><span class="skill-arrow">▾</span></div>
+      <div class="skill-body"><div class="skill-body-inner"><div class="skill-item"><span class="skill-dot"></span>結構化提案撰寫與對內外簡報</div><div class="skill-item"><span class="skill-dot"></span>新聞稿撰寫與媒體關係維護</div><div class="skill-item"><span class="skill-dot"></span>KOL／KOC 合作開發與溝通</div><div class="skill-item"><span class="skill-dot"></span>Canva 視覺化提案設計</div></div></div>
+    </div>
+    <div class="skill-card" onclick="toggleSkill(this)">
+      <div class="skill-header"><div class="skill-header-left"><div class="skill-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div><div><div class="skill-name">數位行銷與電商</div><div class="skill-summary">社群經營 · 電商平台 · AI應用</div></div></div><span class="skill-arrow">▾</span></div>
+      <div class="skill-body"><div class="skill-body-inner"><div class="skill-item"><span class="skill-dot"></span>社群媒體經營（FB／IG）</div><div class="skill-item"><span class="skill-dot"></span>自有電商平台運營與點數平台開發</div><div class="skill-item"><span class="skill-dot"></span>EDM、廣告投放整合規劃</div><div class="skill-item"><span class="skill-dot"></span>AI 工具導入工作流程（黑客松第 2 名）</div></div></div>
+    </div>
+  </div>
+  <div class="divider-label">工具 &amp; 認證</div>
+  <div class="tools-row">
+    <span class="tool-tag highlight">PowerBI</span><span class="tool-tag highlight">SQL</span><span class="tool-tag highlight">Canva</span><span class="tool-tag">Microsoft Office</span><span class="tool-tag">Google Analytics</span><span class="tool-tag">Illustrator</span><span class="tool-tag">勞動部產業人才投資計畫</span><span class="tool-tag">Microsoft PowerBI 認證</span><span class="tool-tag">Canva Essentials 認證</span>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-deco">M</div>
+  <div class="contact-section-label">Contact</div>
+  <div class="contact-title">Get in <span>Touch</span></div>
+  <div class="contact-sub">歡迎任何合作機會或職涯討論</div>
+  <div class="contact-grid">
+    <div class="contact-left">
+      <div class="contact-item"><span class="contact-item-label">Email</span><span class="contact-item-value"><a href="mailto:meira0823@gmail.com">meira0823@gmail.com</a></span></div>
+      <div class="contact-item"><span class="contact-item-label">Phone</span><span class="contact-item-value">0978-996-823</span></div>
+      <div class="contact-item"><span class="contact-item-label">Location</span><span class="contact-item-value">台北市 · 台灣</span></div>
+      <div class="contact-item"><span class="contact-item-label">Currently</span><span class="contact-item-value">和雲行動服務 iRent · 營運行銷高級專員</span></div>
+      <div class="contact-item"><span class="contact-item-label">Education</span><span class="contact-item-value">國立臺北科技大學 經營管理碩士 · 2026 入學</span></div>
+      <div class="contact-item">
+        <span class="contact-item-label">Social</span>
+        <div class="social-row">
+          <a class="social-btn" href="https://www.instagram.com/1313_bliing/" target="_blank">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            @1313_bliing
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="contact-right">
+      <p class="contact-note">行銷企劃出身，深耕品牌策略與會員營運。<br>目前對品牌行銷主管、專案管理等職缺有高度興趣，<br>歡迎洽談各類合作機會。</p>
+      <div class="btn-row">
+        <button class="btn-cv">Download CV</button>
+        <button class="btn-email" onclick="location.href='mailto:meira0823@gmail.com'">Send Email</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-divider"></div>
+  <div class="footer-row">
+    <span class="footer-name">Meira Lin · 林藝軒</span>
+    <span class="footer-copy">© 2026 · All rights reserved</span>
+  </div>
+</section>
+
+<script>
+  function toggleMenu() { document.getElementById('navMobile').classList.toggle('open'); }
+  function closeMenu() { document.getElementById('navMobile').classList.remove('open'); }
+  function toggleTl(index) {
+    document.querySelectorAll('.tl-item').forEach(function(item, i) {
+      if (i === index) { item.classList.toggle('active'); } else { item.classList.remove('active'); }
+    });
+  }
+  document.querySelector('.tl-item[data-index="0"]').classList.add('active');
+  function toggleFeat(card) {
+    document.querySelectorAll('.feat-card').forEach(function(c) { if (c !== card) c.classList.remove('open'); });
+    card.classList.toggle('open');
+  }
+  function toggleSkill(card) {
+    document.querySelectorAll('.skill-card').forEach(function(c) { if (c !== card) c.classList.remove('open'); });
+    card.classList.toggle('open');
+  }
+  window.addEventListener('scroll', function() {
+    var pos = window.scrollY + 80;
+    ['hero','career','portfolio','skills','contact'].forEach(function(id) {
+      var el = document.getElementById(id);
+      var link = document.querySelector('.nav-links a[href="#'+id+'"]');
+      if (!el || !link) return;
+      link.style.color = (el.offsetTop <= pos && el.offsetTop + el.offsetHeight > pos) ? 'var(--ink)' : '';
+    });
+  });
+</script>
+</body>
+</html>
